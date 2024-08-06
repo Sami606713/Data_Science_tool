@@ -1,1 +1,2 @@
 # Data Science Tool
+- This project aims to build a tool that helps data science learners by providing a simple interface to practice and gain hands-on experience. It is designed to be user-friendly and educational.
