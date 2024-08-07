@@ -31,7 +31,7 @@ def load_data():
             df=df[columns]
 
         # Display the DataFrame
-        st.dataframe(df.head())
+        st.dataframe(df.head(),use_container_width=True)
         
         # Save the DataFrame to a file
         df.to_csv(data_path,index=False)
