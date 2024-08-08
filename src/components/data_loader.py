@@ -8,6 +8,7 @@ def load_data():
     """
     This fun is responsible for loadind the data
     """
+    st.header("Data Loading")
     data_path = os.path.join("Data/raw","raw.csv")
     data_file=st.file_uploader("Upload a file",type=['csv'])
 
