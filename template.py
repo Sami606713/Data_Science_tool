@@ -31,6 +31,7 @@ folder_files=[
     os.path.join("src/components","data_loader.py"),
     os.path.join("src/components","data_processor.py"),
     os.path.join("src/components","data_visulization.py"),
+    os.path.join("src/components","feature_engnering.py"),
     "setup.py",
     "test_environment.py",
     "requirements.txt",

@@ -2,6 +2,7 @@ from src.components.data_loader import load_data
 from streamlit_option_menu import option_menu
 from src.components.data_processor import process_data
 from src.components.data_visulization import visulaize_data
+from src.components.feature_engnering import custom_feature_engnering
 import streamlit as st
 import pandas as pd
 
@@ -9,7 +10,7 @@ import pandas as pd
 def layout():
         selected = option_menu(
                 menu_title=None,
-                options=["Getting Data", 'Processing Data','Visulaize Data','Feature Engnering'], 
+                options=["Getting Data", 'Processing Data','Visulaize Data','Feature Engnering',"Model Building"], 
                 icons=['📥', '⚙️', '📊', '🛠️'], 
                 menu_icon="Data Cleaning", 
                 default_index=0,
@@ -43,4 +44,9 @@ if __name__=="__main__":
         visulaize_data(df=df)
     
     elif option == 'Feature Engnering':
-        st.header("Feature Engnering")
+        df=st.session_state['data']
+        custom_feature_engnering(df=df)
+    
+
+    elif option == "Model Building":
+        st.header("Model Building")
