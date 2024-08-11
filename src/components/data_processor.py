@@ -1,13 +1,15 @@
+# --------------------------------------Import Packaeges-------------------------------------------#
 import os
 import logging
 import streamlit as st
 import pandas as pd
 import numpy as np
 from src.utils import save_file
+#--------------------------------------------------------------------------------------------------#
 
-
+#--------------------------------------Data Preprocessing-----------------------------------------#
 def process_data(df):
-    # set the path for the processed data
+    #--------------------------Process data path--------------------------------------------------#
     process_data_path=os.path.join("Data/process","process.csv")
     st.header("Data Processing")
 
@@ -24,7 +26,7 @@ def process_data(df):
     if option=="Shape of data":
         st.write(f"Data contain {df.shape[0]} rows and {df.shape[1]} columns")
 
-    # --------------------Check the Null values and also handle null values-------------------------------------#
+    # ----------------------------Handle Null Values----------------------------------------#
     if option=="Null Values":
         col1,col2=st.columns(2)
         with col1:
@@ -33,7 +35,7 @@ def process_data(df):
         with col2:
             cat_cols=df.select_dtypes("object").columns
             st.dataframe(df[cat_cols].isnull().sum(),use_container_width=True)
-        option=st.selectbox("Select any option: ",["Drop Null Values","Fill Null Values","Do Nothing","Drop Columns"])
+        option=st.selectbox("Select any option: ",["Drop Null Values","Fill Null Values","Drop Columns","Do Nothing"])
         try:
             if option=="Drop Null Values":
                 if st.button("Drop Null Values"):
@@ -65,7 +67,7 @@ def process_data(df):
         except Exception as e:
             st.write(e)
 
-     # --------------------Check Duplicates and also handle the duplicates-------------------------------------#
+     # ---------------------------------Handle Duplicates-------------------------------------#
     if option=="Duplicates":
         st.write(f"{df.duplicated().sum()} Duplicates Found")
 
@@ -73,14 +75,14 @@ def process_data(df):
             st.dataframe(df[df.duplicated()],use_container_width=True)
             
             option=st.selectbox("Select any option: ",["Drop Duplicates","Keep Duplicates"])
+
             if option=="Drop Duplicates":
-                # if st.button("Drop Duplicates"):
                     df=df.drop_duplicates()
                     st.write("Duplicates are removed please selcect the data again")
                     st.session_state['data']=df
                     save_file(path=process_data_path,df=df)
+
             elif option=="Keep Duplicates":
-                # if st.button("Keep Duplicates"):
                     st.write("Duplicates are kept please select the data again")
                     st.session_state['data']=df
     
@@ -124,15 +126,21 @@ def process_data(df):
         col1,col2=st.columns(2)
         with col1:
             num_cols=df.select_dtypes("number").columns
-            try:
-                st.dataframe(df[num_cols].describe(include="number"),use_container_width=True)
-            except Exception as e:
-                st.write("Cant't describe the empty columns")
+            if num_cols is not None:
+                try:
+                    st.dataframe(df[num_cols].describe(include="number"),use_container_width=True)
+                except Exception as e:
+                    st.write("Cant't describe the empty columns")
         with col2:
             cat_cols=df.select_dtypes("object").columns
-            st.dataframe(df[cat_cols].describe(include='object'),use_container_width=True)
+            if cat_cols is not None:
+                try:
+                    st.dataframe(df[cat_cols].describe(include='object'),use_container_width=True)
+                except Exception as e:
+                    st.write("Cant't describe the empty columns")
+           
 
-    # --------------------Check Unique Values------------------------------------#  
+    # --------------------------------Unique Values------------------------------------#  
     if option=="Unique Values":
        for i in df.select_dtypes("object").columns:
             total_unique=df[i].nunique()
