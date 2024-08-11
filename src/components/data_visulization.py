@@ -1,14 +1,19 @@
+# --------------------------------------Import Packaeges-------------------------------------------#
 import os
 import pandas as pd
 import numpy as np
 import streamlit as st
 import matplotlib.pyplot as plt
 import seaborn as sns
+import plotly.express as px
+import plotly.graph_objects as go
+#--------------------------------------------------------------------------------------------------#
 
-
+#---------------------------------------Data Visulization------------------------------------------#
 def visulaize_data(df):
     st.header("Exploratory Data Analysis")
     num_col,cat_col=st.columns(2)
+    # =============================Nummerical Distribution=========================================#
     with num_col:
         col,op=st.columns(2)
         with col:
@@ -35,28 +40,35 @@ def visulaize_data(df):
             if(on):
                 plt.grid(True)
         st.pyplot(fig)  # Pass the figure object to st.pyplot()
+    #---------------------------------------------------------------------------------------------#
+        
+    # =============================Categorical Distribution=========================================#
     with cat_col:
         col,op=st.columns(2)
         with col:
             col=st.selectbox("",df.select_dtypes('object').columns)
         with op:
             plot_op=st.selectbox("",['Bar plot','Pie Chart'])
-        fig, ax = plt.subplots() 
-        temp=df[col].value_counts().nlargest(15)
-        if plot_op == 'Bar plot':
-            plt.title("Most Fequent")
-            sns.barplot(x=temp.index,y=temp.values, ax=ax,palette='viridis')
-            plt.xticks(rotation='vertical')
-            on=st.toggle('Show Grid',key='4')
-            if(on):
-                plt.grid(True)
-        elif plot_op == 'Pie Chart':
-            plt.title("Most Fequent")
-            plt.pie(temp.values,labels=temp.index,autopct="%.2f")
-        st.pyplot(fig)  # Pass the figure object to st.pyplot()
-
+        
+        if col is not None:
+            fig, ax = plt.subplots() 
+            temp=df[col].value_counts().nlargest(15)
+            if plot_op == 'Bar plot':
+                plt.title("Most Fequent")
+                sns.barplot(x=temp.index,y=temp.values, ax=ax,palette='viridis')
+                plt.xticks(rotation='vertical')
+                on=st.toggle('Show Grid',key='4')
+                if(on):
+                    plt.grid(True)
+            elif plot_op == 'Pie Chart':
+                plt.title("Most Fequent")
+                plt.pie(temp.values,labels=temp.index,autopct="%.2f")
+            st.pyplot(fig) 
+    #------------------------------------------------------------------------------------------#
+        
     st.header("Bi-Variate Analysis",divider="rainbow")
-    st.header("Numerical by Numerical",divider="rainbow")
+    st.header("Num-Num Distrubution",divider="rainbow")
+    # =============================Numm-Num Distribution====================================#
     num_num_col=st.columns(1)[0]
     with num_num_col:
         col1,col2,op=st.columns(3)
@@ -80,8 +92,10 @@ def visulaize_data(df):
             if(on):
                 plt.grid(True)
         st.pyplot(fig)
-    
-    st.header("Categorical by Categorical",divider="rainbow")
+    #----------------------------------------------------------------------------------------#
+        
+    st.header("Cat-Cat Distrubution",divider="rainbow")
+    # =============================Cat-Cat Distribution====================================#
     cat_cat_col=st.columns(1)[0]
     with cat_cat_col:
         st.write("This section is under development")
@@ -112,3 +126,20 @@ def visulaize_data(df):
 
 
         st.pyplot(fig)
+    #--------------------------------------------------------------------------------------------#
+    
+    # =============================Multivariate Analysis=========================================#
+    # =============================Correlation=========================================#
+    st.header("Numerical Correlation",divider="rainbow")
+    num_corr_col=st.columns(1)[0]
+    with num_corr_col:
+        col1,col2=st.columns(2)
+        with col1:
+            col1=st.selectbox("",df.select_dtypes('number').columns,key="cor1")
+        with col2:
+            col2=st.selectbox("",df.select_dtypes('number').columns,key="cor2")
+        fig, ax = plt.subplots(figsize=(20,7)) 
+        plt.title(f"Correlation between {col1} and {col2}")
+        sns.heatmap(df[[col1,col2]].corr(), ax=ax,annot=True,cmap='viridis')
+        st.pyplot(fig)
+    # ===============================================================================#
