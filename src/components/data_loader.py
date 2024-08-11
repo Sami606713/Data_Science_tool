@@ -73,8 +73,8 @@ def load_data():
         
         # Save the DataFrame to a file
         df.to_csv(data_path,index=False)
-        # Save the data in session state
-        # st.session_state['data']=df
+        #----------------------------------------Save the data in session state-------------------#
+        st.session_state['data']=df
     except Exception as e:
         pass
         # st.write("Data is not loaded yet")
