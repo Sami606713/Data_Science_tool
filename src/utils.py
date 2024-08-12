@@ -6,9 +6,12 @@ import zipfile
 import subprocess
 import shutil
 import pandas as pd
+from huggingface_hub import InferenceClient
+from dotenv import load_dotenv
+load_dotenv()
 #--------------------------------------------------------------------------------------------------#
 
-
+hf_token=os.getenv("hf_token")
 # -------------------------------------------Save File---------------------------------------------#
 def save_file(df,path):
     """ 
@@ -89,3 +92,31 @@ def load_kaggle_data():
             except Exception as e:
                 st.error(f"An error occurred: {e}")
 #-------------------------------------------------------------------------------------------------#
+
+#--------------------------------Chatbot----------------------------------------------------------#
+def chat_response(text):
+    client = InferenceClient(
+    "microsoft/Phi-3-mini-4k-instruct",
+    token=hf_token,
+    )
+    
+    prompt_text=f"""Tell me to the point response and complete the response with in 500 words if response is large else complete the resposne on your choice.
+                    Here is my prompt: {text}"""
+    
+    for message in client.chat_completion(
+        messages=[{"role": "user", "content": prompt_text}],
+        max_tokens=500,
+        stream=True,
+        ):
+        # print(message.choices[0].delta.content, end="")
+        yield message.choices[0].delta.content
+
+def chatbot_ui():
+    with st.popover("Use AI"):
+        with st.container():
+            prompt = st.chat_input("Say something")
+            if prompt:
+                st.write("User: ",prompt)
+                response=chat_response(text=prompt)
+                st.write_stream(response)
+#================================================================================================#

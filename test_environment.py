@@ -4,9 +4,12 @@ from streamlit_option_menu import option_menu
 from src.components.data_processor import process_data
 from src.components.data_visulization import visulaize_data
 from src.components.feature_engnering import custom_feature_engnering
+from src.utils import chatbot_ui
 import streamlit as st
 import pandas as pd
 #--------------------------------------------------------------------------------------------------#
+
+#------------------------------------Session State variable----------------------------------------#
 
 #-----------------------------------Page Layout----------------------------------------------------#
 def layout():
@@ -18,6 +21,8 @@ def layout():
                 default_index=0,
                 orientation="horizontal"
                 )
+        # add a chat ui
+        chatbot_ui()
         return selected
 #--------------------------------------------------------------------------------------------------#
 
@@ -33,6 +38,7 @@ if __name__=="__main__":
 
     
     option=layout()
+    
     #====================================Loading Data Phase=========================================#
     if option == "Getting Data":
         load_data()

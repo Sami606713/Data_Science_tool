@@ -6,3 +6,5 @@ streamlit
 streamlit-option-menu
 streamlit-ace
 kaggle
+huggingface_hub
+python-dotenv
