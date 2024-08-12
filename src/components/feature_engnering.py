@@ -5,6 +5,7 @@ import numpy as np
 import streamlit as st
 from streamlit_ace import st_ace
 import textwrap
+from src.utils import explain_error
 import io
 import sys
 #--------------------------------------------------------------------------------------------------#
@@ -71,6 +72,7 @@ def custom_feature_engnering(df):
 
                             except Exception as e:
                                 st.error(f"An error occurred: {e}")
+                                explain_error(error=e)
 
                     # Now add a apply button to apply the changes and reset button to reset the changes
                     col1,col2=st.columns(2)
@@ -90,6 +92,7 @@ def custom_feature_engnering(df):
             if st.button("Move to model Building"):
                 pass
     except Exception as e:
-        st.write("some error occur")
+        st.write(e)
+        explain_error(error=e)
 
             

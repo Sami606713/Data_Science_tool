@@ -2,6 +2,7 @@
 import streamlit as st
 import pandas as pd
 from src.utils import load_kaggle_data
+from src.utils import explain_error
 import os
 #--------------------------------------------------------------------------------------------------#
 
@@ -77,5 +78,4 @@ def load_data():
         st.session_state['data']=df
     except Exception as e:
         pass
-        # st.write("Data is not loaded yet")
-        # st.write("Please load the data first")
+        

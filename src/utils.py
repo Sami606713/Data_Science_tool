@@ -75,7 +75,8 @@ def load_kaggle_data():
                             shutil.move(original_file,target_file)
                             df=pd.read_excel(target_file)
                             return df
-                        else:
+
+                        elif rename_files[0].endswith(".csv"):
                             original_file=os.path.join('Data/raw',rename_files[0])
                             target_file=os.path.join('Data/raw','raw.csv')
                             shutil.move(original_file,target_file)
@@ -104,8 +105,8 @@ def chat_response(text):
                     Here is my prompt: {text}"""
     
     for message in client.chat_completion(
-        messages=[{"role": "user", "content": prompt_text}],
-        max_tokens=500,
+        messages=[{"role": "assistant", "content": prompt_text}],
+        max_tokens=1000,
         stream=True,
         ):
         # print(message.choices[0].delta.content, end="")
@@ -120,3 +121,9 @@ def chatbot_ui():
                 response=chat_response(text=prompt)
                 st.write_stream(response)
 #================================================================================================#
+
+# ===================================Explain Error===============================================#
+def explain_error(error):
+    if st.button("Explain"):
+        response=chat_response(text=error)
+        st.write_stream(response)

@@ -5,6 +5,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 from src.utils import save_file
+from src.utils import explain_error
 #--------------------------------------------------------------------------------------------------#
 
 #--------------------------------------Data Preprocessing-----------------------------------------#
@@ -157,5 +158,4 @@ def process_data(df):
                         st.write()
     except Exception as e:
         st.write(e)
-        with st.popover("Explain"):
-            st.write(e)
+        explain_error(error=e)

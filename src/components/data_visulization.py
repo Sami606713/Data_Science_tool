@@ -5,6 +5,7 @@ import numpy as np
 import streamlit as st
 import matplotlib.pyplot as plt
 import seaborn as sns
+from src.utils import explain_error
 #--------------------------------------------------------------------------------------------------#
 
 #---------------------------------------Data Visulization------------------------------------------#
@@ -143,4 +144,5 @@ def visulaize_data(df):
             st.pyplot(fig)
         # ===============================================================================#
     except Exception as e:
-        st.write('Some error occur')
+        st.write(e)
+        explain_error(error=e)
