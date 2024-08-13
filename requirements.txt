@@ -8,3 +8,4 @@ streamlit-ace
 kaggle
 huggingface_hub
 python-dotenv
+scikit-learn
