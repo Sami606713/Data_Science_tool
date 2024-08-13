@@ -4,7 +4,7 @@ from streamlit_option_menu import option_menu
 from src.components.data_processor import process_data
 from src.components.data_visulization import visulaize_data
 from src.components.feature_engnering import custom_feature_engnering
-from src.model_training.train_model import build_model
+from src.model_training.train_model import model_trainer
 from src.utils import chatbot_ui
 import streamlit as st
 import pandas as pd
@@ -61,4 +61,5 @@ if __name__=="__main__":
     
     #=====================================Model Building Phase==================================#
     elif option == "Model Building":
-        build_model(df=None)
+       df=st.session_state["data"]
+       model_trainer(df=df)

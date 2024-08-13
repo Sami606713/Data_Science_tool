@@ -28,6 +28,7 @@ def get_packages(file_path):
 setup(
     author="Samiullah",
     author_email="sami606713@gmail.com",
+    version="0.0.1",
     name="Data_Science_Tool",
     description="In this project our goal is to build a tool for data scince learner that can larn by simple click to gain a hand on experience.",
     long_description="This project aims to build a tool that helps data science learners by providing a simple interface to practice and gain hands-on experience. It is designed to be user-friendly and educational.",
