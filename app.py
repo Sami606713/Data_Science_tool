@@ -1,12 +1,18 @@
+# --------------------------------------Import Packaeges-------------------------------------------#
 from src.components.data_loader import load_data
 from streamlit_option_menu import option_menu
 from src.components.data_processor import process_data
 from src.components.data_visulization import visulaize_data
 from src.components.feature_engnering import custom_feature_engnering
+from src.model_training.train_model import model_trainer
+from src.utils import chatbot_ui
 import streamlit as st
 import pandas as pd
+#--------------------------------------------------------------------------------------------------#
 
-# Set the page layout
+#------------------------------------Session State variable----------------------------------------#
+
+#-----------------------------------Page Layout----------------------------------------------------#
 def layout():
         selected = option_menu(
                 menu_title=None,
@@ -16,11 +22,14 @@ def layout():
                 default_index=0,
                 orientation="horizontal"
                 )
+        # add a chat ui
+        chatbot_ui()
         return selected
+#--------------------------------------------------------------------------------------------------#
 
 if __name__=="__main__":
    
-    # Set the page configration setting
+    #====================================Page Configration=========================================#
     st.set_page_config(
         page_title="Data Science App",
         page_icon="🧊",
@@ -30,23 +39,27 @@ if __name__=="__main__":
 
     
     option=layout()
+    
+    #====================================Loading Data Phase=========================================#
     if option == "Getting Data":
         load_data()
 
+    #=====================================Data Preprocessing Phase==================================#
     elif option == "Processing Data":
-        # st.write("Processing Data")
         df=st.session_state['data']
-        # st.dataframe(df)
         process_data(df=df)
 
+    #====================================Data Visulization Phase====================================#
     elif option == "Visulaize Data":
         df=st.session_state['data']
         visulaize_data(df=df)
     
+    #=====================================Feature Engnering=========================================#
     elif option == 'Feature Engnering':
         df=st.session_state['data']
         custom_feature_engnering(df=df)
     
-
+    #=====================================Model Building Phase==================================#
     elif option == "Model Building":
-        st.header("Model Building")
+       df=st.session_state["data"]
+       model_trainer(df=df)
