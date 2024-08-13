@@ -96,21 +96,24 @@ def load_kaggle_data():
 
 #--------------------------------Chatbot----------------------------------------------------------#
 def chat_response(text):
-    client = InferenceClient(
-    "microsoft/Phi-3-mini-4k-instruct",
-    token=hf_token,
-    )
-    
-    prompt_text=f"""Tell me to the point response and complete the response with in 500 words if response is large else complete the resposne on your choice.
-                    Here is my prompt: {text}"""
-    
-    for message in client.chat_completion(
-        messages=[{"role": "assistant", "content": prompt_text}],
-        max_tokens=1000,
-        stream=True,
-        ):
-        # print(message.choices[0].delta.content, end="")
-        yield message.choices[0].delta.content
+    try:
+        client = InferenceClient(
+        "microsoft/Phi-3-mini-4k-instruct",
+        token=hf_token,
+        )
+        
+        prompt_text=f"""Tell me to the point response and complete the response with in 500 words if response is large else complete the resposne on your choice.
+                        Here is my prompt: {text}"""
+        
+        for message in client.chat_completion(
+            messages=[{"role": "assistant", "content": prompt_text}],
+            max_tokens=1000,
+            stream=True,
+            ):
+            # print(message.choices[0].delta.content, end="")
+            yield message.choices[0].delta.content
+    except Exception as e:
+        st.error(f"An error occurred: {e}")
 
 def chatbot_ui():
     with st.popover("Use AI"):

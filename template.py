@@ -32,6 +32,8 @@ folder_files=[
     os.path.join("src/components","data_processor.py"),
     os.path.join("src/components","data_visulization.py"),
     os.path.join("src/components","feature_engnering.py"),
+    os.path.join("src/model-training","__init__.py"),
+    os.path.join("src/model-training","train_model.py"),  
     "setup.py",
     "test_environment.py",
     "requirements.txt",
