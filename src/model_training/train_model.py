@@ -131,12 +131,16 @@ def model_trainer(df):
 
         #================================Model Pipeline================================================#
         st.subheader("Select Task",divider="rainbow")
-        task_type=st.selectbox('Select Task',["Classification","Regression"])
+        task_type=st.selectbox('Select Task',["Classification","Regression",
+                                              'XgboostRegressor','DecessionTreeRegressor',
+                                              'GradientBoostRegressor','AdaBoostRegressor'])
         # -------------------------------Classification----------------------------------------------#
         if task_type=="Classification":
             st.subheader("Build Model Pipeline",divider="rainbow")
 
-            model=st.selectbox("Select the model",["LogisticRegression","RandomForestClassifier"])
+            model=st.selectbox("Select the model",["LogisticRegression","RandomForestClassifier",
+                                                   'AdaBoostClassifier','GradientBoostClassifier',
+                                                   'DecessionTreeClassifier','XgboostClassifier'])
 
             final_pipeline=build_model(transformer=transformer,model_name=model)
             if st.button("View Model_Pipeline"):

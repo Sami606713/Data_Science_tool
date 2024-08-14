@@ -1,11 +1,15 @@
 # --------------------------------------Import Packaeges-------------------------------------------#
 from sklearn.preprocessing import LabelEncoder,OneHotEncoder,StandardScaler,MinMaxScaler
+from sklearn.model_selection import cross_val_score
 from sklearn.impute import SimpleImputer
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.linear_model import (LogisticRegression,LinearRegression)
-from sklearn.ensemble import (RandomForestClassifier,RandomForestRegressor)
+from sklearn.ensemble import (RandomForestClassifier,RandomForestRegressor,
+                              AdaBoostClassifier,AdaBoostRegressor,
+                              GradientBoostingClassifier,GradientBoostingRegressor)
 from sklearn.tree import (DecisionTreeClassifier,DecisionTreeRegressor)
+from xgboost import (XGBClassifier,XGBRegressor)
 from sklearn.metrics import (accuracy_score,precision_score,recall_score,f1_score,confusion_matrix,
                              r2_score,mean_absolute_error,mean_squared_error)
 from huggingface_hub import InferenceClient
@@ -58,7 +62,6 @@ def load_kaggle_data():
                 with st.spinner('Wait for download...'):
                     #-------------------------Download the data----------------------------#
                     subprocess.run(kaggle_data_cmd.split(" "),check=True)
-                    
                     # ------------------------Convert to Zip------------------------------#
                     zip_file = kaggle_data_cmd.split('/')[-1] + ".zip"
 
@@ -116,7 +119,7 @@ def chat_response(text):
     try:
         client = InferenceClient(
         "microsoft/Phi-3-mini-4k-instruct",
-        token=hf_token,
+        token='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'
         )
         
         prompt_text=f"""Tell me to the point response and complete the response with in 500 words if response is large else complete the resposne on your choice.
@@ -156,6 +159,7 @@ def numerical_pipeline():
         steps=[]
         transformation=st.multiselect("apply transformation",
                                     options=["ImputeMissingValues","Standard Scaler","MinMaxScaler"],
+                                    default="ImputeMissingValues"
                                     )
         if "Standard Scaler" in transformation:
             steps.append(("StandardScaling",StandardScaler()))
@@ -182,6 +186,7 @@ def categorical_pipeline():
         steps=[]
         transformation=st.multiselect("apply transformation",
                                     options=["ImputeMissingValues","OneHotEncoder","OrdinalEncoder"],
+                                    default="ImputeMissingValues"
                                     )
         if "OneHotEncoder" in transformation:
             steps.append(("OHE",OneHotEncoder(drop='first',handle_unknown='ignore',sparse_output=False)))
@@ -237,7 +242,15 @@ def get_model(model_name):
         "LogisticRegression":LogisticRegression(),
         "LinearRegression":LinearRegression(),
         "RandomForestClassifier":RandomForestClassifier(),
-        "RandomForestRegressor":RandomForestRegressor()
+        "RandomForestRegressor":RandomForestRegressor(),
+        "AdaBoostRegressor":AdaBoostRegressor(),
+        "AdaBoostClassifier":AdaBoostClassifier(),
+        "GradientBoostRegressor":GradientBoostingRegressor(),
+        "GradientBoostClassifier":GradientBoostingClassifier(),
+        "DecessionTreeClassifier":DecisionTreeClassifier(),
+        "DecessionTreeRegressor":DecisionTreeRegressor(),
+        "XgboostClassifier":XGBClassifier(),
+        "XgboostRegressor":XGBRegressor()
     }
     return model_dic[model_name]
 
@@ -300,12 +313,12 @@ def model_train(model_pipe,x_train,x_test,y_train,y_test):
 # ----------Classification Results------------------#
 def classification_results(actual,predicion):
     st.write("Classification Results")
-    # actaul value
-    st.write("Actual Value")
-    # st.table(actual)
+    # # actaul value
+    # st.write("Actual Value")
+    # # st.table(actual)
 
     # predicted value
-    st.write("predicted Value")
+    # st.write("predicted Value")
     # st.table(predicion)
 
     result={
@@ -314,10 +327,12 @@ def classification_results(actual,predicion):
         "Recall":recall_score(actual,predicion,average='weighted'),
         "F1-Score":f1_score(actual,predicion,average='weighted')
     }
-    st.dataframe(result,use_container_width=True)
-    st.write("Confussion Matrix")
-    st.write(confusion_matrix(actual,predicion))
-    
+    with st.container(border=True):
+        st.dataframe(result,use_container_width=True)
+    with st.container(border=True):
+        st.write("Confussion Matrix")
+        st.dataframe(confusion_matrix(actual,predicion),use_container_width=True)
+
 # ----------Regression Results------------------#
 def regression_results(actual,predicion):
     st.write("Results Results")

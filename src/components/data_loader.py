@@ -49,7 +49,6 @@ def load_data():
         data_file=None
     # -------------------------------------Kaggle Data-------------------------------------------#
     elif data_source=="Kaggle":
-        st.write("Kaggle is not implemented yet")
         df=load_kaggle_data()
         st.session_state['data']=df
 

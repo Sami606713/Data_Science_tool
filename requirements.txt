@@ -9,3 +9,4 @@ kaggle
 huggingface_hub
 python-dotenv
 scikit-learn
+xgboost

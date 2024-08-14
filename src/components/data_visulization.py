@@ -78,20 +78,22 @@ def visulaize_data(df):
                 sec_col=st.selectbox("",df.select_dtypes('number').columns,key="sec_column")
             with op:
                 plot_op=st.selectbox("",['Scatter plot','line-plot'])
-            fig, ax = plt.subplots(figsize=(15,5)) 
-            if plot_op == 'Scatter plot':
-                plt.title(f"Scatter plot {col}")
-                sns.scatterplot(x=df[fir_col],y=df[sec_col], ax=ax)
-                on=st.toggle('Show Grid',key='5')
-                if(on):
-                    plt.grid(True)
-            elif plot_op == 'line-plot':
-                plt.title(f"Line Chart of {col}")
-                sns.lineplot(x=df[fir_col],y=df[sec_col], ax=ax,palette='deep')
-                on=st.toggle('Show Grid',key='6')
-                if(on):
-                    plt.grid(True)
-            st.pyplot(fig)
+            
+            if fir_col and sec_col is not None:
+                fig, ax = plt.subplots(figsize=(15,5)) 
+                if plot_op == 'Scatter plot':
+                    plt.title(f"Scatter plot {col}")
+                    sns.scatterplot(x=df[fir_col],y=df[sec_col], ax=ax)
+                    on=st.toggle('Show Grid',key='5')
+                    if(on):
+                        plt.grid(True)
+                elif plot_op == 'line-plot':
+                    plt.title(f"Line Chart of {col}")
+                    sns.lineplot(x=df[fir_col],y=df[sec_col], ax=ax,palette='deep')
+                    on=st.toggle('Show Grid',key='6')
+                    if(on):
+                        plt.grid(True)
+                st.pyplot(fig)
         #----------------------------------------------------------------------------------------#
             
         st.header("Cat-Cat Distrubution",divider="rainbow")
@@ -109,23 +111,24 @@ def visulaize_data(df):
             with opt:
                 grap_op=st.selectbox("",['Bar plot','Pie Chart'],key="cat_graph option") 
 
-            temp=df.groupby([fir_sel_col])[sec_sel_col].value_counts().reset_index(name="count")
-            fig, ax = plt.subplots(figsize=(15,7))   
-            if grap_op=='Bar plot':
-                try:
-                    plt.title(f"Bat Plot of {fir_sel_col} and {sec_sel_col}")
-                    sns.barplot(x=temp[fir_sel_col],y=temp['count'],hue=temp[sec_sel_col], ax=ax,palette='viridis')
-                    plt.xticks(rotation='vertical')
-                except Exception as e:
-                    st.write("There is some error in your data")
-            elif grap_op=="Pie Chart":
-                plt.title("This section is under development")
-                # st.write("This section is under development")
-                # temp=temp.pivot(index=fir_sel_col,columns=sec_sel_col,values='count')
-                # plt.pie(temp.values,labels=temp.index,autopct="%.2f")
+            if fir_sel_col and sec_sel_col is not None:
+                temp=df.groupby([fir_sel_col])[sec_sel_col].value_counts().reset_index(name="count")
+                fig, ax = plt.subplots(figsize=(15,7))   
+                if grap_op=='Bar plot':
+                    try:
+                        plt.title(f"Bat Plot of {fir_sel_col} and {sec_sel_col}")
+                        sns.barplot(x=temp[fir_sel_col],y=temp['count'],hue=temp[sec_sel_col], ax=ax,palette='viridis')
+                        plt.xticks(rotation='vertical')
+                    except Exception as e:
+                        st.write("There is some error in your data")
+                elif grap_op=="Pie Chart":
+                    plt.title("This section is under development")
+                    # st.write("This section is under development")
+                    # temp=temp.pivot(index=fir_sel_col,columns=sec_sel_col,values='count')
+                    # plt.pie(temp.values,labels=temp.index,autopct="%.2f")
 
 
-            st.pyplot(fig)
+                st.pyplot(fig)
         #--------------------------------------------------------------------------------------------#
         
         # =============================Multivariate Analysis=========================================#
@@ -138,10 +141,11 @@ def visulaize_data(df):
                 col1=st.selectbox("",df.select_dtypes('number').columns,key="cor1")
             with col2:
                 col2=st.selectbox("",df.select_dtypes('number').columns,key="cor2")
-            fig, ax = plt.subplots(figsize=(20,7)) 
-            plt.title(f"Correlation between {col1} and {col2}")
-            sns.heatmap(df[[col1,col2]].corr(), ax=ax,annot=True,cmap='viridis')
-            st.pyplot(fig)
+            if col1 and col2 is not None:
+                fig, ax = plt.subplots(figsize=(20,7)) 
+                plt.title(f"Correlation between {col1} and {col2}")
+                sns.heatmap(df[[col1,col2]].corr(), ax=ax,annot=True,cmap='viridis')
+                st.pyplot(fig)
         # ===============================================================================#
     except Exception as e:
         st.write(e)
